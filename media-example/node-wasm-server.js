@@ -11,6 +11,11 @@ const mime = {
 };
 
 http.createServer((request, response) => {
+    if (path.normalize(decodeURI(request.url)) !== decodeURI(request.url)) {
+        response.statusCode = 403;
+        response.end();
+        return;
+    }
   let realPath = path.join(__dirname, `.${url.parse(request.url).pathname}`);
   fs.access(realPath, fs.constants.R_OK, err => {
     if (err) {
